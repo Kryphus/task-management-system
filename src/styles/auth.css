@@ -1,0 +1,88 @@
+/* authPage.css */
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f7f7f7; /* Light background */
+}
+
+.form-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;  /* Constrain the card's width */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+.form-wrapper h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%; /* Ensure input takes full width of its container */
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+.form-wrapper button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.form-wrapper p {
+    margin-top: 1rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.success {
+  color: green;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Animation */
+.form-card.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.form-card.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
+}

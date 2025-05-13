@@ -11,7 +11,6 @@ export async function renderDashboardPage() {
     const main = document.querySelector('main');
     main.innerHTML = `
     <h2>Hello, ${username}!</h2>
-    
     `;
 
     // <button id="logout-btn">Logout</button>

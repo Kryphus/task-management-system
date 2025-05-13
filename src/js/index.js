@@ -1,4 +1,5 @@
 import '../styles/styles.css';
+import '../styles/auth.css';
 import { renderLoginPage } from './pages/loginPage.js';
 
 
