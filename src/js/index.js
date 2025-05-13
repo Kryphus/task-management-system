@@ -1,3 +1,7 @@
 import '../styles/styles.css';
+import { renderLoginPage } from './pages/loginPage.js';
 
-console.log('Hello, World!');
+
+// uncomment login if done designing, then comment renderNav()
+renderLoginPage();
+
