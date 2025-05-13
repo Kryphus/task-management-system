@@ -36,3 +36,34 @@ export async function getCurrentUser() {
   const { data: { user } } = await supabase.auth.getUser();
   return user;
 }
+
+// Get all projects created by the current user
+export async function getUserProjects(userId) {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('id, name, description')
+    .eq('created_by', userId);  // Filter projects by the user who created them
+
+  if (error) {
+    console.error('Error fetching user projects:', error);
+    return [];
+  }
+
+  return data;
+}
+
+// Fetch user details by username
+export async function getUserByUsername(username) {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('id')
+    .eq('username', username)
+    .single();  // Ensures only one user is returned
+
+  if (error) {
+    console.error('Error fetching user by username:', error);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+}

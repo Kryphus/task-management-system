@@ -3,7 +3,7 @@
 import { signIn } from '../services/authService.js';
 import { renderNav } from './main-page.js';
 import { renderSignupPage } from './signupPage.js';
-import { handleNavigation } from '../domUtils.js/handleNavigation.js';  
+import { handleNavigation } from '../domUtils/handleNavigation.js';  
 
 export function renderLoginPage() {
   const body = document.querySelector('body');

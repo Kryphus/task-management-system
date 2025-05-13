@@ -1,0 +1,71 @@
+/* Basic Modal Styling */
+.modal {
+  position: fixed;  /* Position it fixed on the screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;  /* Center the modal horizontally */
+  align-items: center;  /* Center the modal vertically */
+  z-index: 9999;  /* Make sure it's on top of other content */
+}
+
+.modal-content {
+  background-color: #fff;  /* White background for the modal */
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;  /* Set a fixed width for the modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Add some shadow for depth */
+  animation: fadeIn 0.3s ease-in-out;  /* Fade-in effect */
+}
+
+/* Fade-in animation for the modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+/* Styling for the form */
+#task-title, #task-description, #task-assigned-to, #task-project, #task-status {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#task-status {
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#close-modal-btn {
+  background-color: #dc3545;
+  margin-top: 10px;
+}
+
+#close-modal-btn:hover {
+  background-color: #c82333;
+}
