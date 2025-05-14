@@ -2,7 +2,8 @@
 import { createTask } from '../services/taskService.js'; // we'll create this service later
 import { getCurrentUser, getUserProjects } from '../services/authService.js'; // Make sure to import getUserProjects
 import { renderTasks } from '../domUtils/taskDisplay.js'; // To display the tasks after creation
-import { getProjectByName, createProject } from '../services/projectService.js';
+import { getProjectByNameAndUser, createProject, getProjectByName } from '../services/projectService.js';
+import { getUserByUsername } from '../services/authService.js'; // Import the getUserByUsername function
 
 export async function renderMyTasksPage() {
   const currentUser = await getCurrentUser(); // Fetch current user here
@@ -70,13 +71,10 @@ function openCreateTaskModal(currentUser) {
   // Handle task creation form submission
   document.getElementById('create-task-form').addEventListener('submit', (e) => handleTaskCreation(e, currentUser));
 
-  
+
 }
 
 // myTasksPage.js
-
-// myTasksPage.js
-
 async function handleTaskCreation(e, currentUser) {
   e.preventDefault();
 
@@ -89,6 +87,7 @@ async function handleTaskCreation(e, currentUser) {
   let assignedUserUUID = currentUser?.id; // Default to current user
 
   if (assignedTo && assignedTo !== currentUser?.user_metadata?.username) {
+    // Now we use getUserByUsername to fetch the assigned user's UUID based on their username
     const { data, error } = await getUserByUsername(assignedTo);
     if (error) {
       alert('User not found');
@@ -100,24 +99,29 @@ async function handleTaskCreation(e, currentUser) {
   let projectUUID = null;
 
   if (project === '#Home') {
-    const { data: projectData, error } = await getProjectByName(project);
-    if (error || !projectData) {
+    const { data: projectData, error } = await getProjectByNameAndUser('#Home', currentUser.id);
+    if (!projectData) {
+      console.log('Creating #Home project...');
       const { data: newProject, error: createError } = await createProject('#Home', 'Default project for all users', currentUser.id);
-      if (createError) {
+      console.log('Create project result:', newProject, createError);
+
+
+      if (createError || !newProject) {
         alert('Error creating the #Home project');
         return;
       }
-      projectUUID = newProject.id; 
+      projectUUID = newProject.id;
     } else {
-      projectUUID = projectData.id; 
+      projectUUID = projectData.id;
     }
+
   } else {
     const { data: projectData, error } = await getProjectByName(project);
     if (error || !projectData) {
       alert('Project not found');
       return;
     }
-    projectUUID = projectData.id; 
+    projectUUID = projectData.id;
   }
 
   const { data, error } = await createTask(title, description, status, projectUUID, assignedUserUUID, currentUser?.id);
@@ -135,12 +139,16 @@ async function handleTaskCreation(e, currentUser) {
 
 async function populateProjects(currentUser) {
   const projectDropdown = document.getElementById('task-project');
+  projectDropdown.innerHTML = ''; // Clear existing options
 
-  // Get all the projects that belong to the current user
-  const projects = await getUserProjects(currentUser.id); // Now we call getUserProjects
-  
-  if (projects) {
+  const projects = await getUserProjects(currentUser.id);
+
+  let hasHome = false;
+
+  if (projects && projects.length > 0) {
     projects.forEach(project => {
+      if (project.name === '#Home') hasHome = true;
+
       const option = document.createElement('option');
       option.value = project.name;
       option.textContent = project.name;
@@ -148,9 +156,11 @@ async function populateProjects(currentUser) {
     });
   }
 
-  // Also add #Home as the default option
-  const homeOption = document.createElement('option');
-  homeOption.value = '#Home';
-  homeOption.textContent = '#Home';
-  projectDropdown.appendChild(homeOption);
+  // Append #Home if not found in projects
+  if (!hasHome) {
+    const homeOption = document.createElement('option');
+    homeOption.value = '#Home';
+    homeOption.textContent = '#Home';
+    projectDropdown.appendChild(homeOption);
+  }
 }

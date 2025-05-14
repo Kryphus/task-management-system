@@ -1,20 +1,22 @@
 import { supabase } from './supabaseClient.js';
 
-// Fetch project by name (e.g., #Home)
-export async function getProjectByName(projectName) {
+// Fetch project by name and user ID
+export async function getProjectByNameAndUser(projectName, userId) {
   const { data, error } = await supabase
     .from('projects')
     .select('id')
     .eq('name', projectName)
-    .single();  // Ensure only one project is returned
+    .eq('created_by', userId)
+    .single();  // Get single result
 
-  if (error) {
-    console.error('Error fetching project by name:', error);
+  if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found, ignore that error
+    console.error('Error fetching project by name and user:', error);
     return { data: null, error };
   }
 
   return { data, error: null };
 }
+
 
 // Create a new project
 export async function createProject(projectName, description, userId) {
@@ -36,3 +38,35 @@ export async function createProject(projectName, description, userId) {
 
   return { data, error: null };
 }
+
+// Fetch all projects created by a user
+export async function getUserProjects(userId) {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('id, name, description, created_by, created_at')
+    .eq('created_by', userId);
+
+  if (error) {
+    console.error('Error fetching user projects:', error);
+    return [];
+  }
+
+  return data;
+}
+
+// Fetch project by name (without filtering by user)
+export async function getProjectByName(projectName) {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('id')
+    .eq('name', projectName)
+    .single();
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching project by name:', error);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+}
+

@@ -30,15 +30,11 @@ export async function renderTasks(currentUser) {
         .eq('id', task.project_id)
         .single(); // Fetch the project name using the project_id
 
-      // Fetch assigned user name using the assigned_to (UUID)
-      const { data: userData, error: userError } = await supabase
-        .from('user_profiles')
-        .select('username')
-        .eq('id', task.assigned_to)
-        .single(); // Fetch the username using the assigned_to UUID
+      // Get the assigned user's username from auth.user_metadata (not from user_profiles)
+      const assignedUserName = currentUser?.user_metadata?.username || 'Unknown'; // Use the username from the metadata
 
-      if (projectError || userError) {
-        console.error('Error fetching project or user:', projectError || userError);
+      if (projectError) {
+        console.error('Error fetching project:', projectError);
         return;
       }
 
@@ -50,7 +46,7 @@ export async function renderTasks(currentUser) {
         <p>${task.description || 'No description'}</p>
         <p>Status: ${task.status}</p>
         <p>Project: ${projectData ? projectData.name : 'Unknown'}</p>  <!-- Display project name -->
-        <p>Assigned to: ${userData ? userData.username : 'Unknown'}</p>  <!-- Display assigned user name -->
+        <p>Assigned to: ${assignedUserName}</p>  <!-- Display assigned user name from auth.user_metadata -->
       `;
       taskContainer.appendChild(taskDiv);
     }

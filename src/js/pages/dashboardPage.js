@@ -1,4 +1,4 @@
-import { getCurrentUser, signOut } from '../services/authService.js';
+import { getCurrentUser } from '../services/authService.js';
 
 export async function renderDashboardPage() {
     const user = await getCurrentUser();

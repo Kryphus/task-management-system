@@ -53,17 +53,20 @@ export async function getUserProjects(userId) {
 }
 
 // Fetch user details by username
+// services/authService.js
+
+// Function to get user by username from user_profiles table
 export async function getUserByUsername(username) {
   const { data, error } = await supabase
-    .from('user_profiles')
-    .select('id')
-    .eq('username', username)
-    .single();  // Ensures only one user is returned
+    .from('user_profiles')  // Query the `user_profiles` table
+    .select('id')  // Fetch the `id` (UUID) of the user
+    .eq('username', username)  // Match the `username`
+    .single();  // Expect a single result because usernames are unique
 
   if (error) {
     console.error('Error fetching user by username:', error);
     return { data: null, error };
   }
 
-  return { data, error: null };
+  return { data, error: null }; // Return the user data (UUID)
 }
