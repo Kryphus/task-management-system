@@ -1,4 +1,4 @@
-import '../styles/styles.css';
+import '..//styles/styles.css';
 import '../styles/auth.css';
 import '../styles/modal.css';
 import '../styles/project.css';

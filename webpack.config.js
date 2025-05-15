@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
+const webpack = require("webpack");
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === "production";
@@ -41,7 +42,10 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: "./src/index.html",
       }),
-      new Dotenv(),  // This will load the .env file and inject variables into the build
+      new webpack.DefinePlugin({
+        'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),
+        'process.env.SUPABASE_KEY': JSON.stringify(process.env.SUPABASE_KEY),
+      }),
     ],
   };
 };
