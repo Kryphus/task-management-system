@@ -29,10 +29,9 @@ export async function renderTasks(currentUser) {
         .from('projects')
         .select('name')
         .eq('id', task.project_id)
-        .single(); // Fetch the project name using the project_id
+        .single();
 
-      // Get the assigned user's username from auth.user_metadata (not from user_profiles)
-      const assignedUserName = currentUser?.user_metadata?.username || 'Unknown'; // Use the username from the metadata
+      const assignedUserName = currentUser?.user_metadata?.username || 'Unknown';
 
       if (projectError) {
         console.error('Error fetching project:', projectError);
@@ -40,23 +39,27 @@ export async function renderTasks(currentUser) {
       }
 
       const taskDiv = document.createElement('div');
-      taskDiv.className = 'task-card';
-      taskDiv.style.backgroundColor = getStatusColor(task.status); // Color-coded tasks based on status
+      taskDiv.className = 'task-card'; // Keep only this line for class
+
       taskDiv.innerHTML = `
-        <h3>${task.title}</h3>
-        <p>${task.description || 'No description'}</p>
-        <p>Status: ${task.status}</p>
-        <p>Project: ${projectData ? projectData.name : 'Unknown'}</p>  <!-- Display project name -->
-        <p>Assigned to: ${assignedUserName}</p>  <!-- Display assigned user name from auth.user_metadata -->
-      `;
+    <div class="task-details">
+      <h3>${task.title}</h3>
+      <p class="description">${task.description || 'No description'}</p>
+    </div>
+    <div class="task-info">
+      <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+      <span>Project: ${projectData ? projectData.name : 'Unknown'}</span>
+      <span>Assigned to: ${assignedUserName}</span>
+    </div>
+  `;
 
       taskDiv.addEventListener('dblclick', () => {
         openEditTaskModal(task);
       });
 
-
       taskContainer.appendChild(taskDiv);
     }
+
   }
 
 

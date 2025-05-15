@@ -1,0 +1,83 @@
+#logs-container {
+    margin-top: 1rem;
+}  
+
+.log-entry {
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem 0;
+}
+
+.log-entry p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.log-entry small {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+/* Modal Styles */
+.inbox-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.inbox-modal .modal-content {
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.inbox-modal .modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.inbox-modal .modal-content p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.inbox-modal .modal-content button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.inbox-modal #confirm-delete-btn {
+  background-color: #d9534f;
+  color: white;
+}
+
+.inbox-modal #confirm-delete-btn:hover {
+  background-color: #c9302c;
+}
+
+.inbox-modal #cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.inbox-modal #cancel-btn:hover {
+  background-color: #5a6268;
+}

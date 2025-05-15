@@ -22,19 +22,21 @@ export async function getProjectByNameAndUser(projectName, userId) {
 export async function createProject(projectName, description, userId) {
   const { data, error } = await supabase
     .from('projects')
-    .insert([
-      {
-        name: projectName,
-        description: description,
-        created_by: userId,  // Set the current user's ID as the creator of the project
-      }
-    ])
+    .insert([{ name: projectName, description, created_by: userId }])
     .single();
 
   if (error) {
     console.error('Error creating project:', error);
     return { data: null, error };
   }
+
+  // Insert log for creator
+  insertLog({
+    userId,
+    actorId: userId,
+    actionType: 'created_project',
+    message: `You created a new project '${projectName}'`
+  });
 
   return { data, error: null };
 }
@@ -91,4 +93,15 @@ export async function deleteProject(id) {
     .eq('id', id);
 
   return { data, error };
+}
+
+// Helper to insert log
+async function insertLog({ userId, actorId, actionType, message }) {
+  const { error } = await supabase
+    .from('activity_logs')
+    .insert([{ user_id: userId, actor_id: actorId, action_type: actionType, message }]);
+
+  if (error) {
+    console.error('Error inserting log:', error);
+  }
 }
