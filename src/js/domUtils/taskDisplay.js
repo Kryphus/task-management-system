@@ -1,6 +1,7 @@
 // domUtils/taskDisplay.js
 import { getCurrentUser } from '../services/authService.js'; // Import getCurrentUser if needed
 import { supabase } from '../services/supabaseClient.js'
+import { openEditTaskModal } from '../pages/myTasksPage.js';
 
 export async function renderTasks(currentUser) {
   const taskContainer = document.getElementById('task-container');
@@ -48,9 +49,17 @@ export async function renderTasks(currentUser) {
         <p>Project: ${projectData ? projectData.name : 'Unknown'}</p>  <!-- Display project name -->
         <p>Assigned to: ${assignedUserName}</p>  <!-- Display assigned user name from auth.user_metadata -->
       `;
+
+      taskDiv.addEventListener('dblclick', () => {
+        openEditTaskModal(task);
+      });
+
+
       taskContainer.appendChild(taskDiv);
     }
   }
+
+
 }
 
 function getStatusColor(status) {

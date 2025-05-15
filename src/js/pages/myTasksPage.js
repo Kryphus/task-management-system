@@ -164,3 +164,90 @@ async function populateProjects(currentUser) {
     projectDropdown.appendChild(homeOption);
   }
 }
+
+
+
+// open and edit task modal
+
+import { updateTask, deleteTask } from '../services/taskService.js';
+
+export function openEditTaskModal(task) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Edit Task</h2>
+      <form id="edit-task-form">
+        <label for="edit-task-title">Title:</label>
+        <input type="text" id="edit-task-title" value="${task.title}" required><br>
+        
+        <label for="edit-task-description">Description (optional):</label>
+        <textarea id="edit-task-description">${task.description || ''}</textarea><br>
+        
+        <label for="edit-task-status">Status:</label>
+        <select id="edit-task-status">
+          <option value="To-Do" ${task.status === 'To-Do' ? 'selected' : ''}>To-Do</option>
+          <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+          <option value="Done" ${task.status === 'Done' ? 'selected' : ''}>Done</option>
+        </select><br>
+
+        <button type="submit">Save</button>
+        <button type="button" id="delete-task-btn">Delete Task</button>
+        <button type="button" id="close-modal-btn">Close</button>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close modal function
+  function closeModal() {
+    document.body.removeChild(modal);
+  }
+
+  // Close button handler
+  modal.querySelector('#close-modal-btn').addEventListener('click', closeModal);
+
+  // Delete button handler
+  modal.querySelector('#delete-task-btn').addEventListener('click', async () => {
+    const confirmed = confirm('Are you sure you want to delete this task?');
+    if (!confirmed) return;
+
+    const { error } = await deleteTask(task.id);
+    if (error) {
+      alert('Error deleting task: ' + error.message);
+      return;
+    }
+    alert('Task deleted successfully.');
+    closeModal();
+    const currentUser = await getCurrentUser(); // make sure you have access or pass user
+    renderTasks(currentUser);
+  });
+
+  // Save (update) handler
+  modal.querySelector('#edit-task-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const updatedTask = {
+      id: task.id,
+      title: document.getElementById('edit-task-title').value.trim(),
+      description: document.getElementById('edit-task-description').value.trim(),
+      status: document.getElementById('edit-task-status').value,
+    };
+
+    if (!updatedTask.title) {
+      alert('Title is required.');
+      return;
+    }
+
+    const { error } = await updateTask(updatedTask);
+    if (error) {
+      alert('Error updating task: ' + error.message);
+      return;
+    }
+    alert('Task updated successfully.');
+    closeModal();
+    const currentUser = await getCurrentUser(); // or pass user as param
+    renderTasks(currentUser);
+  });
+}

@@ -70,3 +70,25 @@ export async function getProjectByName(projectName) {
   return { data, error: null };
 }
 
+
+// Update project by ID
+export async function updateProject({ id, name, description }) {
+  const { data, error } = await supabase
+    .from('projects')
+    .update({ name, description })  // removed updated_at here
+    .eq('id', id)
+    .single();
+
+  return { data, error };
+}
+
+
+// Delete project by ID
+export async function deleteProject(id) {
+  const { data, error } = await supabase
+    .from('projects')
+    .delete()
+    .eq('id', id);
+
+  return { data, error };
+}
