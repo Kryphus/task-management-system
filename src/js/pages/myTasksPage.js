@@ -103,7 +103,7 @@ async function handleTaskCreation(e, currentUser) {
     // Now we use getUserByUsername to fetch the assigned user's UUID based on their username
     const { data, error } = await getUserByUsername(assignedTo);
     if (error) {
-      alert('User not found');
+      console.log('User not found');
       return;
     }
     assignedUserUUID = data?.id; // Set the assigned user's UUID
@@ -120,7 +120,7 @@ async function handleTaskCreation(e, currentUser) {
 
 
       if (createError || !newProject) {
-        alert('Error creating the #Home project');
+        console.log('Error creating the #Home project');
         return;
       }
       projectUUID = newProject.id;
@@ -131,7 +131,7 @@ async function handleTaskCreation(e, currentUser) {
   } else {
     const { data: projectData, error } = await getProjectByName(project);
     if (error || !projectData) {
-      alert('Project not found');
+      console.log('Project not found');
       return;
     }
     projectUUID = projectData.id;
@@ -140,9 +140,9 @@ async function handleTaskCreation(e, currentUser) {
   const { data, error } = await createTask(title, description, status, projectUUID, assignedUserUUID, currentUser?.id);
 
   if (error) {
-    alert(error.message);
+    console.log(error.message);
   } else {
-    alert('Task created successfully!');
+    console.log('Task created successfully!');
     renderTasks(currentUser); // Pass currentUser to renderTasks
     document.body.removeChild(document.querySelector('.modal'));
   }
@@ -237,10 +237,10 @@ export function openEditTaskModal(task) {
 
     const { error } = await deleteTask(task.id);
     if (error) {
-      alert('Error deleting task: ' + error.message);
+      console.log('Error deleting task: ' + error.message);
       return;
     }
-    alert('Task deleted successfully.');
+    console.log('Task deleted successfully.');
     closeModal();
     const currentUser = await getCurrentUser(); // make sure you have access or pass user
     renderTasks(currentUser);
@@ -258,16 +258,16 @@ export function openEditTaskModal(task) {
     };
 
     if (!updatedTask.title) {
-      alert('Title is required.');
+      console.log('Title is required.');
       return;
     }
 
     const { error } = await updateTask(updatedTask);
     if (error) {
-      alert('Error updating task: ' + error.message);
+      console.logle.log('Error updating task: ' + error.message);
       return;
     }
-    alert('Task updated successfully.');
+    console.log('Task updated successfully.');
     closeModal();
     const currentUser = await getCurrentUser(); // or pass user as param
     renderTasks(currentUser);

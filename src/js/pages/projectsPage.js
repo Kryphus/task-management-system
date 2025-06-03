@@ -157,7 +157,7 @@ function openCreateProjectModal(currentUser) {
     const description = document.getElementById('project-description').value.trim();
 
     if (!name) {
-      alert('Project name is required');
+      console.log('Project name is required');
       return;
     }
 
@@ -168,11 +168,11 @@ function openCreateProjectModal(currentUser) {
 
     const { data, error } = await createProject(name, description, currentUser.id);
     if (error) {
-      alert(`Error creating project: ${error.message}`);
+      console.log(`Error creating project: ${error.message}`);
       return;
     }
 
-    alert('Project created successfully!');
+    console.log('Project created successfully!');
     document.body.removeChild(modal);
     await loadProjects();
   });
@@ -214,10 +214,10 @@ function openEditProjectModal(project) {
 
     const { error } = await deleteProject(project.id);
     if (error) {
-      alert('Error deleting project: ' + error.message);
+      console.log('Error deleting project: ' + error.message);
       return;
     }
-    alert('Project deleted successfully.');
+    console.log('Project deleted successfully.');
     closeModal();
     await loadProjects();
   });
@@ -229,7 +229,7 @@ function openEditProjectModal(project) {
     const description = document.getElementById('edit-project-description').value.trim();
 
     if (!name) {
-      alert('Project name is required.');
+      console.log('Project name is required.');
       return;
     }
 
@@ -246,11 +246,11 @@ function openEditProjectModal(project) {
 
     const { error } = await updateProject(updatedProject);
     if (error) {
-      alert('Error updating project: ' + error.message);
+      console.log('Error updating project: ' + error.message);
       return;
     }
 
-    alert('Project updated successfully.');
+    console.log('Project updated successfully.');
     closeModal();
     await loadProjects();
   });

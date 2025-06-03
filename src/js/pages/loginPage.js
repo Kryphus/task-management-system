@@ -72,7 +72,7 @@ export function renderLoginPage() {
       if (error.message.includes('Invalid login credentials')) {
         document.getElementById('login-email-error').textContent = 'Invalid email or password.';
       } else {
-        alert(error.message);
+        console.log(error.message);
       }
       return;
     }
