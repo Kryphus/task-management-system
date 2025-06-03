@@ -6,13 +6,12 @@ import { showLoading } from '../domUtils/loading.js';
 
 export async function renderProjectsPage() {
   const main = document.querySelector('main');
-  showLoading(main); // Step 1: show spinner immediately
+  showLoading(main); 
 
   requestAnimationFrame(async () => {
     const currentUser = await getCurrentUser();
     const projects = await getUserProjects(currentUser.id);
 
-    // Step 2: Replace spinner with actual content once data is ready
     main.innerHTML = `
       <h2>Projects</h2>
       <button id="create-project-btn">Create New Project</button>
@@ -66,7 +65,6 @@ async function loadProjects() {
       <p><strong>Tasks:</strong> ${taskCount}</p>
     `;
 
-    // Add double-click to open edit modal
     card.addEventListener('dblclick', () => {
       openEditProjectModal(project);
     });
@@ -84,7 +82,6 @@ async function renderProjectCards(projects) {
     return;
   }
 
-  // Step 1: Build up project metadata first
   const projectDetails = await Promise.all(
     projects.map(async (project) => {
       const [creatorRes, tasksRes] = await Promise.all([
@@ -108,7 +105,6 @@ async function renderProjectCards(projects) {
     })
   );
 
-  // Step 2: Now render all cards at once
   for (const project of projectDetails) {
     const card = document.createElement('div');
     card.className = 'project-card';
@@ -161,7 +157,6 @@ function openCreateProjectModal(currentUser) {
       return;
     }
 
-    // Add '#' prefix if missing
     if (!name.startsWith('#')) {
       name = '#' + name;
     }
@@ -179,7 +174,6 @@ function openCreateProjectModal(currentUser) {
 
 }
 
-// New: Edit Project modal with update + delete
 function openEditProjectModal(project) {
   const modal = document.createElement('div');
   modal.className = 'modal';
@@ -233,7 +227,6 @@ function openEditProjectModal(project) {
       return;
     }
 
-    // Add '#' prefix if missing (fix if user deletes it while editing)
     if (!name.startsWith('#')) {
       name = '#' + name;
     }

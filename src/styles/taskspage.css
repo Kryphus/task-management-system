@@ -10,7 +10,6 @@
     flex-direction: row;
     align-items: center;
     background-color: #fafafa;
-    /* lighter background */
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     padding: 12px 16px;
@@ -22,7 +21,6 @@
 
 .task-card:hover {
     background-color: #f0f4ff;
-    /* subtle blue hover */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -39,7 +37,6 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: #2c3e50;
-    /* dark slate blue */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -48,7 +45,6 @@
 .task-details p.description {
     margin: 0;
     color: #657786;
-    /* softer grayish blue */
     font-size: 0.9rem;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -60,20 +56,17 @@
     gap: 12px;
     font-size: 0.85rem;
     color: #495057;
-    /* medium gray */
     flex-shrink: 0;
 }
 
 .task-info span {
     background-color: #e1e4e8;
-    /* light gray */
     padding: 4px 8px;
     border-radius: 12px;
     white-space: nowrap;
     font-weight: 500;
 }
 
-/* Soften the status colors */
 .task-status {
     font-weight: 700;
     padding: 4px 12px;
@@ -83,19 +76,16 @@
 
 .task-status.status-to-do {
     background-color: #adb5bd;
-    /* muted gray */
     color: #212529;
 }
 
 .task-status.status-in-progress {
     background-color: #ffe8a1;
-    /* pale yellow */
     color: #5a5a00;
 }
 
 .task-status.status-done {
     background-color: #a3d3a2;
-    /* soft green */
     color: #1b361b;
 }
 

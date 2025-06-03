@@ -1,5 +1,4 @@
-// domUtils/taskDisplay.js
-import { getCurrentUser } from '../services/authService.js'; // Import getCurrentUser if needed
+import { getCurrentUser } from '../services/authService.js'; 
 import { supabase } from '../services/supabaseClient.js'
 import { openEditTaskModal } from '../pages/myTasksPage.js';
 

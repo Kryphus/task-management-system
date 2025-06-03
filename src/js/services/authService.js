@@ -42,7 +42,7 @@ export async function getUserProjects(userId) {
   const { data, error } = await supabase
     .from('projects')
     .select('id, name, description')
-    .eq('created_by', userId);  // Filter projects by the user who created them
+    .eq('created_by', userId);  
 
   if (error) {
     console.error('Error fetching user projects:', error);
@@ -52,23 +52,20 @@ export async function getUserProjects(userId) {
   return data;
 }
 
-// Fetch user details by username
-// services/authService.js
-
 // Function to get user by username from user_profiles table
 export async function getUserByUsername(username) {
   const { data, error } = await supabase
-    .from('user_profiles')  // Query the `user_profiles` table
-    .select('id')  // Fetch the `id` (UUID) of the user
-    .eq('username', username)  // Match the `username`
-    .single();  // Expect a single result because usernames are unique
+    .from('user_profiles')  
+    .select('id') 
+    .eq('username', username) 
+    .single();  
 
   if (error) {
     console.error('Error fetching user by username:', error);
     return { data: null, error };
   }
 
-  return { data, error: null }; // Return the user data (UUID)
+  return { data, error: null }; 
 }
 
 

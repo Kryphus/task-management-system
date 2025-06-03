@@ -10,13 +10,12 @@ import illustration from '../../assets/digital-illustration.png';
 
 export function renderLoginPage() {
   const body = document.querySelector('body');
-  body.innerHTML = ''; // Clear body content
+  body.innerHTML = ''; 
 
   const app = document.createElement('div');
   app.id = 'app';
   body.appendChild(app);
 
-  // Create a wrapper for centering
   const wrapper = document.createElement('div');
   wrapper.className = 'form-wrapper';
   app.appendChild(wrapper);
@@ -51,14 +50,12 @@ export function renderLoginPage() {
 `;
 
 
-  // Trigger the fade-in transition after the content is loaded
   const formCard = wrapper.querySelector('.form-card');
   formCard.classList.add('fade-in');
   setTimeout(() => {
     formCard.classList.add('show');
   }, 0);
 
-  // Submit event for form
   document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearErrors();
@@ -81,7 +78,6 @@ export function renderLoginPage() {
     handleNavigation();
   });
 
-  // Navigate to signup page
   document.getElementById('go-to-signup').addEventListener('click', (e) => {
     e.preventDefault();
     renderSignupPage();

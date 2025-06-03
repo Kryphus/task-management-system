@@ -6,10 +6,8 @@ import { showLoading } from '../domUtils/loading.js';
 export async function renderInboxPage() {
   const main = document.querySelector('main');
 
-  // Step 1: Show loading spinner
   showLoading(main);
 
-  // Step 2: Defer log fetching and rendering
   requestAnimationFrame(async () => {
     const user = await getCurrentUser();
 
@@ -35,7 +33,6 @@ export async function renderInboxPage() {
       return;
     }
 
-    // Now populate the inbox
     main.innerHTML = `
       <h2>Inbox</h2>
       <div id="logs-container"></div>
@@ -78,12 +75,11 @@ function openDeleteLogModal(logId) {
   modal.querySelector('#confirm-delete-btn').addEventListener('click', async () => {
     const { error } = await deleteLog(logId);
     if (error) {
-      alert('Error deleting log: ' + error.message);
+      console.log('Error deleting log: ' + error.message);
       return;
     }
-    alert('Log deleted successfully.');
+    console.log('Log deleted successfully.');
     document.body.removeChild(modal);
-    // Refresh inbox logs
     renderInboxPage();
   });
 }

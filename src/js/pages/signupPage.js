@@ -9,9 +9,8 @@ export function renderSignupPage() {
 
 
   const app = document.getElementById('app');
-  app.innerHTML = ''; // Clear content
+  app.innerHTML = ''; 
 
-  // Create a wrapper for centering
   const wrapper = document.createElement('div');
   wrapper.className = 'form-wrapper';
   app.appendChild(wrapper);
@@ -49,14 +48,12 @@ export function renderSignupPage() {
   </div>
 `;
 
-  // Trigger the fade-in transition after the content is loaded
   const formCard = wrapper.querySelector('.form-card');
   formCard.classList.add('fade-in');
   setTimeout(() => {
     formCard.classList.add('show');
   }, 0);
 
-  // Submit event for form
   document.getElementById('signup-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearErrors();
@@ -82,7 +79,6 @@ export function renderSignupPage() {
     document.getElementById('signup-success').textContent = "Account created, you can now sign in.";
   });
 
-  // Navigate to login page
   document.getElementById('go-to-login').addEventListener('click', (e) => {
     e.preventDefault();
     renderLoginPage();

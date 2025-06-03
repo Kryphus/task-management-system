@@ -12,7 +12,6 @@
   background-color: #fff;
 }
 
-/* Left panel (form) */
 .auth-left {
   flex: 1;
   padding: 2rem;
@@ -21,7 +20,6 @@
   justify-content: center;
 }
 
-/* Right panel (illustration) */
 .auth-right {
   flex: 1;
   background-color: #f0f2f5;
@@ -35,7 +33,6 @@
   max-height: 90%;
 }
 
-/* Override for input alignment */
 .auth-left input,
 .auth-left button {
   width: 100%;
@@ -56,7 +53,7 @@
 }
 
 .logo-group img {
-  height: 55px; /* Resize logo here */
+  height: 55px; 
 }
 
 .logo-text {
@@ -71,14 +68,14 @@
 }
 
 
-/* authPage.css */
+/* authPage */
 .form-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: #f7f7f7; /* Light background */
+  background-color: #f7f7f7; 
 }
 
 .form-card {
@@ -87,9 +84,9 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;  /* Constrain the card's width */
+  max-width: 400px;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
+  box-sizing: border-box; 
 }
 
 .form-wrapper h2 {
@@ -99,13 +96,13 @@
 }
 
 input {
-  width: 100%; /* Ensure input takes full width of its container */
+  width: 100%;
   padding: 12px;
   margin: 8px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
+  box-sizing: border-box; 
 }
 
 .form-wrapper button {

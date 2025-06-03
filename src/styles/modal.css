@@ -1,27 +1,25 @@
-/* Basic Modal Styling */
 .modal {
-  position: fixed;  /* Position it fixed on the screen */
+  position: fixed;  
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent black background */
+  background-color: rgba(0, 0, 0, 0.5);  
   display: flex;
-  justify-content: center;  /* Center the modal horizontally */
-  align-items: center;  /* Center the modal vertically */
-  z-index: 9999;  /* Make sure it's on top of other content */
+  justify-content: center; 
+  align-items: center;  
+  z-index: 9999; 
 }
 
 .modal-content {
-  background-color: #fff;  /* White background for the modal */
+  background-color: #fff; 
   padding: 20px;
   border-radius: 8px;
-  width: 400px;  /* Set a fixed width for the modal */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Add some shadow for depth */
-  animation: fadeIn 0.3s ease-in-out;  /* Fade-in effect */
+  width: 400px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+  animation: fadeIn 0.3s ease-in-out; 
 }
 
-/* Fade-in animation for the modal */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -35,7 +33,6 @@
   margin-top: 0;
 }
 
-/* Styling for the form */
 #task-title, #task-description, #task-assigned-to, #task-project, #task-status {
   width: 100%;
   padding: 10px;
@@ -96,7 +93,7 @@ button:hover {
 }
 
 #confirm-logout-btn {
-  background-color: #dc3545; /* red */
+  background-color: #dc3545;
   color: white;
 }
 
@@ -105,7 +102,7 @@ button:hover {
 }
 
 #cancel-logout-btn {
-  background-color: #6c757d; /* gray */
+  background-color: #6c757d; 
   color: white;
 }
 

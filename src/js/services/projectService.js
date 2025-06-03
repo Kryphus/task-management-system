@@ -7,9 +7,9 @@ export async function getProjectByNameAndUser(projectName, userId) {
     .select('id')
     .eq('name', projectName)
     .eq('created_by', userId)
-    .single();  // Get single result
+    .single(); 
 
-  if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found, ignore that error
+  if (error && error.code !== 'PGRST116') { 
     console.error('Error fetching project by name and user:', error);
     return { data: null, error };
   }
@@ -77,7 +77,7 @@ export async function getProjectByName(projectName) {
 export async function updateProject({ id, name, description }) {
   const { data, error } = await supabase
     .from('projects')
-    .update({ name, description })  // removed updated_at here
+    .update({ name, description })  
     .eq('id', id)
     .single();
 

@@ -1,4 +1,3 @@
-// services/logService.js
 import { supabase } from './supabaseClient.js';
 
 export async function deleteLog(id) {

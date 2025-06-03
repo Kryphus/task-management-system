@@ -22,14 +22,12 @@ export async function renderDashboardPage() {
   const userId = user?.id;
   const username = user?.user_metadata?.username || 'User';
 
-  // Fetch completed tasks count assigned to current user
   const { count: completedTasksCount, error: tasksError } = await supabase
     .from('tasks')
     .select('*', { count: 'exact', head: true })
     .eq('assigned_to', userId)
     .eq('status', 'Done');
 
-  // Fetch total projects created by current user
   const { count: totalProjectsCount, error: projectsError } = await supabase
     .from('projects')
     .select('*', { count: 'exact', head: true })

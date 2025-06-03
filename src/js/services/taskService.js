@@ -1,4 +1,3 @@
-// services/taskService.js
 import { supabase } from './supabaseClient.js';
 
 export async function createTask(title, description, status, project, assignedTo, createdBy) {

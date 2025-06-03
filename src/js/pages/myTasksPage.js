@@ -1,25 +1,22 @@
-// myTasksPage.js
-import { createTask } from '../services/taskService.js'; // we'll create this service later
-import { getCurrentUser, getUserProjects } from '../services/authService.js'; // Make sure to import getUserProjects
-import { renderTasks } from '../domUtils/taskDisplay.js'; // To display the tasks after creation
+import { createTask } from '../services/taskService.js';
+import { getCurrentUser, getUserProjects } from '../services/authService.js';
+import { renderTasks } from '../domUtils/taskDisplay.js'; 
 import { getProjectByNameAndUser, createProject, getProjectByName } from '../services/projectService.js';
-import { getUserByUsername } from '../services/authService.js'; // Import the getUserByUsername function
+import { getUserByUsername } from '../services/authService.js'; 
 import { showLoading } from '../domUtils/loading.js';
 import { getAllUsers } from '../services/authService.js';
+import { updateTask, deleteTask } from '../services/taskService.js';
 
 
 export async function renderMyTasksPage() {
   const main = document.querySelector('main');
 
-  // Step 1: Show loading spinner
   showLoading(main);
 
-  // Step 2: Allow spinner to render first before continuing
   requestAnimationFrame(async () => {
     const currentUser = await getCurrentUser();
     const taskContainer = await renderTasks(currentUser);
 
-    // Step 3: Replace with actual task UI
     main.innerHTML = `
       <h2>My Tasks</h2>
       <button id="create-task-btn">Create New Task</button>
@@ -71,23 +68,18 @@ function openCreateTaskModal(currentUser) {
 
   document.body.appendChild(modal);
 
-  // Close the modal
   document.getElementById('close-modal-btn').addEventListener('click', () => {
     document.body.removeChild(modal);
   });
 
-  // Populate projects in the dropdown (for now, only #Home is static)
   populateProjects(currentUser);
   populateUsers(currentUser);
 
-
-  // Handle task creation form submission
   document.getElementById('create-task-form').addEventListener('submit', (e) => handleTaskCreation(e, currentUser));
 
 
 }
 
-// myTasksPage.js
 async function handleTaskCreation(e, currentUser) {
   e.preventDefault();
 
@@ -97,16 +89,15 @@ async function handleTaskCreation(e, currentUser) {
   const project = document.getElementById('task-project').value;
   const assignedTo = document.getElementById('task-assigned-to').value.trim();
 
-  let assignedUserUUID = currentUser?.id; // Default to current user
+  let assignedUserUUID = currentUser?.id;
 
   if (assignedTo && assignedTo !== currentUser?.user_metadata?.username) {
-    // Now we use getUserByUsername to fetch the assigned user's UUID based on their username
     const { data, error } = await getUserByUsername(assignedTo);
     if (error) {
       console.log('User not found');
       return;
     }
-    assignedUserUUID = data?.id; // Set the assigned user's UUID
+    assignedUserUUID = data?.id; 
   }
 
   let projectUUID = null;
@@ -143,12 +134,12 @@ async function handleTaskCreation(e, currentUser) {
     console.log(error.message);
   } else {
     console.log('Task created successfully!');
-    renderTasks(currentUser); // Pass currentUser to renderTasks
+    renderTasks(currentUser);
     document.body.removeChild(document.querySelector('.modal'));
   }
 
   // Refresh the task list
-  const newContainer = await renderTasks(currentUser);  // returns the new DOM
+  const newContainer = await renderTasks(currentUser);  
   const main = document.querySelector('main');
   const oldContainer = document.getElementById('task-container');
 
@@ -161,7 +152,7 @@ async function handleTaskCreation(e, currentUser) {
 
 async function populateProjects(currentUser) {
   const projectDropdown = document.getElementById('task-project');
-  projectDropdown.innerHTML = ''; // Clear existing options
+  projectDropdown.innerHTML = ''; 
 
   const projects = await getUserProjects(currentUser.id);
 
@@ -178,7 +169,6 @@ async function populateProjects(currentUser) {
     });
   }
 
-  // Append #Home if not found in projects
   if (!hasHome) {
     const homeOption = document.createElement('option');
     homeOption.value = '#Home';
@@ -187,11 +177,6 @@ async function populateProjects(currentUser) {
   }
 }
 
-
-
-// open and edit task modal
-
-import { updateTask, deleteTask } from '../services/taskService.js';
 
 export function openEditTaskModal(task) {
   const modal = document.createElement('div');
@@ -222,15 +207,12 @@ export function openEditTaskModal(task) {
 
   document.body.appendChild(modal);
 
-  // Close modal function
   function closeModal() {
     document.body.removeChild(modal);
   }
 
-  // Close button handler
   modal.querySelector('#close-modal-btn').addEventListener('click', closeModal);
 
-  // Delete button handler
   modal.querySelector('#delete-task-btn').addEventListener('click', async () => {
     const confirmed = confirm('Are you sure you want to delete this task?');
     if (!confirmed) return;
@@ -242,11 +224,10 @@ export function openEditTaskModal(task) {
     }
     console.log('Task deleted successfully.');
     closeModal();
-    const currentUser = await getCurrentUser(); // make sure you have access or pass user
+    const currentUser = await getCurrentUser();
     renderTasks(currentUser);
   });
 
-  // Save (update) handler
   modal.querySelector('#edit-task-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -267,9 +248,9 @@ export function openEditTaskModal(task) {
       console.logle.log('Error updating task: ' + error.message);
       return;
     }
-    console.log('Task updated successfully.');
+    alert('Task updated successfully.');
     closeModal();
-    const currentUser = await getCurrentUser(); // or pass user as param
+    const currentUser = await getCurrentUser(); 
     renderTasks(currentUser);
   });
 }
@@ -285,7 +266,6 @@ async function populateUsers(currentUser) {
     option.value = user.username;
     option.textContent = user.username;
 
-    // Preselect current user
     if (user.id === currentUser.id) {
       option.selected = true;
     }

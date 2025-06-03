@@ -15,13 +15,11 @@ export function handleNavigation() {
         link.addEventListener('click', (e) => {
             e.preventDefault();
 
-            // Highlight the active link
             navLinks.forEach(link => link.parentElement.classList.remove('active'));
             link.parentElement.classList.add('active');
 
-            // Determine which page to load
             const page = link.textContent.trim().toUpperCase();
-            mainTag.innerHTML = ''; // Clear the main content
+            mainTag.innerHTML = ''; 
             mainTag.className = '';
 
             switch (page) {
@@ -46,7 +44,6 @@ export function handleNavigation() {
         });
     });
 
-    // Toggle button event listener (for nav)
     const toggleButton = document.getElementById('toggle-btn');
     const sidebar = document.getElementById('sidebar');
 

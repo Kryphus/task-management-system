@@ -65,13 +65,6 @@ body {
     }
 }
 
-/* #sidebar ul li.active a{
-  color: var(--accent-clr);
-
-  svg{
-    fill: var(--accent-clr);
-  }
-} */
 
 #sidebar ul li.active a {
     color: var(--accent-clr);
