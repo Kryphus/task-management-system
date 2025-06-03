@@ -1,5 +1,6 @@
 import { getCurrentUser } from '../services/authService.js';
 import { supabase } from '../services/supabaseClient.js';
+import { showLoading } from '../domUtils/loading.js';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -14,6 +15,9 @@ function getFormattedDate() {
 }
 
 export async function renderDashboardPage() {
+
+  const main = document.querySelector('main');
+  showLoading(main);
   const user = await getCurrentUser();
   const userId = user?.id;
   const username = user?.user_metadata?.username || 'User';
@@ -38,7 +42,7 @@ export async function renderDashboardPage() {
   const greeting = getGreeting();
   const dateStr = getFormattedDate();
 
-  const main = document.querySelector('main');
+  
   main.innerHTML = `
     <div class="dashboard-container">
       <p class="dashboard-date">${dateStr}</p>

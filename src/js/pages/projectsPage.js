@@ -1,21 +1,32 @@
 import { getCurrentUser } from '../services/authService.js';
 import { createProject, getUserProjects, getProjectByNameAndUser, updateProject, deleteProject } from '../services/projectService.js';
 import { supabase } from '../services/supabaseClient.js';
+import { showLoading } from '../domUtils/loading.js';
+
 
 export async function renderProjectsPage() {
-  const currentUser = await getCurrentUser();
-
   const main = document.querySelector('main');
-  main.innerHTML = `
-    <h2>Projects</h2>
-    <button id="create-project-btn">Create New Project</button>
-    <div id="projects-container" class="projects-container"></div>
-  `;
+  showLoading(main); // Step 1: show spinner immediately
 
-  document.getElementById('create-project-btn').addEventListener('click', () => openCreateProjectModal(currentUser));
+  requestAnimationFrame(async () => {
+    const currentUser = await getCurrentUser();
+    const projects = await getUserProjects(currentUser.id);
 
-  await loadProjects();
+    // Step 2: Replace spinner with actual content once data is ready
+    main.innerHTML = `
+      <h2>Projects</h2>
+      <button id="create-project-btn">Create New Project</button>
+      <div id="projects-container" class="projects-container"></div>
+    `;
+
+    document.getElementById('create-project-btn').addEventListener('click', () => {
+      openCreateProjectModal(currentUser);
+    });
+
+    renderProjectCards(projects);
+  });
 }
+
 
 async function loadProjects() {
   const projectsContainer = document.getElementById('projects-container');
@@ -63,6 +74,57 @@ async function loadProjects() {
     projectsContainer.appendChild(card);
   }
 }
+
+async function renderProjectCards(projects) {
+  const container = document.getElementById('projects-container');
+  container.innerHTML = '';
+
+  if (!projects || projects.length === 0) {
+    container.innerHTML = '<p>No projects found.</p>';
+    return;
+  }
+
+  // Step 1: Build up project metadata first
+  const projectDetails = await Promise.all(
+    projects.map(async (project) => {
+      const [creatorRes, tasksRes] = await Promise.all([
+        supabase
+          .from('user_profiles')
+          .select('username')
+          .eq('id', project.created_by)
+          .single(),
+
+        supabase
+          .from('tasks')
+          .select('id', { count: 'exact' })
+          .eq('project_id', project.id)
+      ]);
+
+      return {
+        ...project,
+        creatorName: creatorRes?.data?.username || 'Unknown',
+        taskCount: tasksRes?.data?.length || 0,
+      };
+    })
+  );
+
+  // Step 2: Now render all cards at once
+  for (const project of projectDetails) {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.innerHTML = `
+      <h3>${project.name}</h3>
+      <p>${project.description || 'No description'}</p>
+      <p><strong>Created by:</strong> ${project.creatorName}</p>
+      <p><strong>Tasks:</strong> ${project.taskCount}</p>
+    `;
+
+    card.addEventListener('dblclick', () => openEditProjectModal(project));
+    container.appendChild(card);
+  }
+}
+
+
 
 function openCreateProjectModal(currentUser) {
   const modal = document.createElement('div');

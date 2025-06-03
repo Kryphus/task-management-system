@@ -4,66 +4,60 @@ import { supabase } from '../services/supabaseClient.js'
 import { openEditTaskModal } from '../pages/myTasksPage.js';
 
 export async function renderTasks(currentUser) {
-  const taskContainer = document.getElementById('task-container');
-  taskContainer.innerHTML = ''; // Clear current tasks
+  const container = document.createElement('div');
+  container.id = 'task-container';
 
-  // Fetch tasks for the current user
   const { data: tasks, error } = await supabase
     .from('tasks')
-    .select('id, title, description, status, project_id, assigned_to') // Selecting necessary fields
-    .eq('assigned_to', currentUser.id); // Fetch tasks assigned to the current user
+    .select('id, title, description, status, project_id, assigned_to')
+    .eq('assigned_to', currentUser.id);
 
   if (error) {
+    container.innerHTML = '<p>Error loading tasks.</p>';
     console.error('Error fetching tasks:', error);
-    return;
+    return container;
   }
 
-  if (tasks.length === 0) {
+  if (!tasks.length) {
     const noTasksMessage = document.createElement('p');
     noTasksMessage.textContent = 'You have no tasks yet.';
-    taskContainer.appendChild(noTasksMessage); // Display message if no tasks exist
-  } else {
-    for (const task of tasks) {
-      // Fetch project name using the project_id
-      const { data: projectData, error: projectError } = await supabase
-        .from('projects')
-        .select('name')
-        .eq('id', task.project_id)
-        .single();
-
-      const assignedUserName = currentUser?.user_metadata?.username || 'Unknown';
-
-      if (projectError) {
-        console.error('Error fetching project:', projectError);
-        return;
-      }
-
-      const taskDiv = document.createElement('div');
-      taskDiv.className = 'task-card'; // Keep only this line for class
-
-      taskDiv.innerHTML = `
-    <div class="task-details">
-      <h3>${task.title}</h3>
-      <p class="description">${task.description || 'No description'}</p>
-    </div>
-    <div class="task-info">
-      <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
-      <span>Project: ${projectData ? projectData.name : 'Unknown'}</span>
-      <span>Assigned to: ${assignedUserName}</span>
-    </div>
-  `;
-
-      taskDiv.addEventListener('dblclick', () => {
-        openEditTaskModal(task);
-      });
-
-      taskContainer.appendChild(taskDiv);
-    }
-
+    container.appendChild(noTasksMessage);
+    return container;
   }
 
+  for (const task of tasks) {
+    const { data: projectData, error: projectError } = await supabase
+      .from('projects')
+      .select('name')
+      .eq('id', task.project_id)
+      .single();
 
+    const assignedUserName = currentUser?.user_metadata?.username || 'Unknown';
+
+    const taskDiv = document.createElement('div');
+    taskDiv.className = 'task-card';
+    taskDiv.innerHTML = `
+      <div class="task-details">
+        <h3>${task.title}</h3>
+        <p class="description">${task.description || 'No description'}</p>
+      </div>
+      <div class="task-info">
+        <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+        <span>Project: ${projectData?.name || 'Unknown'}</span>
+        <span>Assigned to: ${assignedUserName}</span>
+      </div>
+    `;
+
+    taskDiv.addEventListener('dblclick', () => {
+      openEditTaskModal(task);
+    });
+
+    container.appendChild(taskDiv);
+  }
+
+  return container;
 }
+
 
 function getStatusColor(status) {
   switch (status) {

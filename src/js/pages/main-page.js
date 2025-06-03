@@ -1,4 +1,5 @@
 import { renderDashboardPage } from './dashboardPage.js';
+import { showLoading } from '../domUtils/loading.js';
 
 export const renderNav = () => {
 
@@ -60,9 +61,11 @@ export const renderNav = () => {
     </nav>`;
 
     const mainContent = document.createElement('main');
-    mainContent.innerHTML = renderDashboardPage();
 
     const body = document.querySelector('body');
     body.appendChild(sidebar);
     body.appendChild(mainContent);
+
+    showLoading(mainContent);
+    renderDashboardPage();
 };

@@ -4,24 +4,35 @@ import { getCurrentUser, getUserProjects } from '../services/authService.js'; //
 import { renderTasks } from '../domUtils/taskDisplay.js'; // To display the tasks after creation
 import { getProjectByNameAndUser, createProject, getProjectByName } from '../services/projectService.js';
 import { getUserByUsername } from '../services/authService.js'; // Import the getUserByUsername function
+import { showLoading } from '../domUtils/loading.js';
+
+
 
 export async function renderMyTasksPage() {
-  const currentUser = await getCurrentUser(); // Fetch current user here
-
   const main = document.querySelector('main');
-  main.innerHTML = `
-    <h2>My Tasks</h2>
-    <button id="create-task-btn">Create New Task</button>
-    <div id="task-container">
-      <!-- Tasks will be displayed here -->
-    </div>
-  `;
 
-  // Open modal for task creation when the button is clicked
-  document.getElementById('create-task-btn').addEventListener('click', () => openCreateTaskModal(currentUser));
+  // Step 1: Show loading spinner
+  showLoading(main);
 
-  renderTasks(currentUser); // Pass currentUser to renderTasks
+  // Step 2: Allow spinner to render first before continuing
+  requestAnimationFrame(async () => {
+    const currentUser = await getCurrentUser();
+    const taskContainer = await renderTasks(currentUser);
+
+    // Step 3: Replace with actual task UI
+    main.innerHTML = `
+      <h2>My Tasks</h2>
+      <button id="create-task-btn">Create New Task</button>
+    `;
+    main.appendChild(taskContainer);
+
+    document.getElementById('create-task-btn').addEventListener('click', () => {
+      openCreateTaskModal(currentUser);
+    });
+  });
 }
+
+
 
 function openCreateTaskModal(currentUser) {
   const modal = document.createElement('div');

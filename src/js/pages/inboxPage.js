@@ -1,53 +1,61 @@
 import { supabase } from '../services/supabaseClient.js';
 import { getCurrentUser } from '../services/authService.js';
 import { deleteLog } from '../services/logService.js';
+import { showLoading } from '../domUtils/loading.js';
 
 export async function renderInboxPage() {
   const main = document.querySelector('main');
-  const user = await getCurrentUser();
 
-  if (!user) {
-    main.innerHTML = '<p>Please sign in to view your inbox.</p>';
-    return;
-  }
+  // Step 1: Show loading spinner
+  showLoading(main);
 
-  const { data: logs, error } = await supabase
-    .from('activity_logs')
-    .select('id, message, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+  // Step 2: Defer log fetching and rendering
+  requestAnimationFrame(async () => {
+    const user = await getCurrentUser();
 
-  if (error) {
-    main.innerHTML = '<p>Error loading logs.</p>';
-    console.error('Error fetching logs:', error);
-    return;
-  }
+    if (!user) {
+      main.innerHTML = '<p>Please sign in to view your inbox.</p>';
+      return;
+    }
 
-  if (!logs || logs.length === 0) {
-    main.innerHTML = '<h2>Inbox</h2><p>No new notifications.</p>';
-    return;
-  }
+    const { data: logs, error } = await supabase
+      .from('activity_logs')
+      .select('id, message, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
 
-  main.innerHTML = `
-    <h2>Inbox</h2>
-    <div id="logs-container"></div>
-  `;
+    if (error) {
+      main.innerHTML = '<p>Error loading logs.</p>';
+      console.error('Error fetching logs:', error);
+      return;
+    }
 
-  const logsContainer = document.getElementById('logs-container');
+    if (!logs || logs.length === 0) {
+      main.innerHTML = '<h2>Inbox</h2><p>No new notifications.</p>';
+      return;
+    }
 
-  logs.forEach(log => {
-    const div = document.createElement('div');
-    div.className = 'log-entry';
-    div.innerHTML = `
-      <p>${log.message}</p>
-      <small>${new Date(log.created_at).toLocaleString()}</small>
+    // Now populate the inbox
+    main.innerHTML = `
+      <h2>Inbox</h2>
+      <div id="logs-container"></div>
     `;
 
-    // Attach double-click listener to open delete modal
-    div.addEventListener('dblclick', () => openDeleteLogModal(log.id));
-    logsContainer.appendChild(div);
+    const logsContainer = document.getElementById('logs-container');
+
+    logs.forEach(log => {
+      const div = document.createElement('div');
+      div.className = 'log-entry';
+      div.innerHTML = `
+        <p>${log.message}</p>
+        <small>${new Date(log.created_at).toLocaleString()}</small>
+      `;
+      div.addEventListener('dblclick', () => openDeleteLogModal(log.id));
+      logsContainer.appendChild(div);
+    });
   });
 }
+
 
 function openDeleteLogModal(logId) {
   const modal = document.createElement('div');
