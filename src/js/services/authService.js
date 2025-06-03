@@ -70,3 +70,17 @@ export async function getUserByUsername(username) {
 
   return { data, error: null }; // Return the user data (UUID)
 }
+
+
+export async function getAllUsers() {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('id, username');
+
+  if (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+
+  return data;
+}

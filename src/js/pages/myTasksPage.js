@@ -5,7 +5,7 @@ import { renderTasks } from '../domUtils/taskDisplay.js'; // To display the task
 import { getProjectByNameAndUser, createProject, getProjectByName } from '../services/projectService.js';
 import { getUserByUsername } from '../services/authService.js'; // Import the getUserByUsername function
 import { showLoading } from '../domUtils/loading.js';
-
+import { getAllUsers } from '../services/authService.js';
 
 
 export async function renderMyTasksPage() {
@@ -61,7 +61,7 @@ function openCreateTaskModal(currentUser) {
         </select><br>
 
         <label for="task-assigned-to">Assigned to:</label>
-        <input type="text" id="task-assigned-to" placeholder="Username" value="${currentUser?.user_metadata?.username}" required><br>
+        <select id="task-assigned-to" required></select><br>
 
         <button type="submit">Create Task</button>
       </form>
@@ -78,6 +78,8 @@ function openCreateTaskModal(currentUser) {
 
   // Populate projects in the dropdown (for now, only #Home is static)
   populateProjects(currentUser);
+  populateUsers(currentUser);
+
 
   // Handle task creation form submission
   document.getElementById('create-task-form').addEventListener('submit', (e) => handleTaskCreation(e, currentUser));
@@ -143,6 +145,15 @@ async function handleTaskCreation(e, currentUser) {
     alert('Task created successfully!');
     renderTasks(currentUser); // Pass currentUser to renderTasks
     document.body.removeChild(document.querySelector('.modal'));
+  }
+
+  // Refresh the task list
+  const newContainer = await renderTasks(currentUser);  // returns the new DOM
+  const main = document.querySelector('main');
+  const oldContainer = document.getElementById('task-container');
+
+  if (main && oldContainer) {
+    main.replaceChild(newContainer, oldContainer);
   }
 }
 
@@ -260,5 +271,25 @@ export function openEditTaskModal(task) {
     closeModal();
     const currentUser = await getCurrentUser(); // or pass user as param
     renderTasks(currentUser);
+  });
+}
+
+async function populateUsers(currentUser) {
+  const dropdown = document.getElementById('task-assigned-to');
+  dropdown.innerHTML = '';
+
+  const users = await getAllUsers();
+
+  users.forEach(user => {
+    const option = document.createElement('option');
+    option.value = user.username;
+    option.textContent = user.username;
+
+    // Preselect current user
+    if (user.id === currentUser.id) {
+      option.selected = true;
+    }
+
+    dropdown.appendChild(option);
   });
 }
