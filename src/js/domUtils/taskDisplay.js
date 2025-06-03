@@ -1,10 +1,12 @@
 import { getCurrentUser } from '../services/authService.js'; 
 import { supabase } from '../services/supabaseClient.js'
 import { openEditTaskModal } from '../pages/myTasksPage.js';
+import { showLoading } from './loading.js';
 
-export async function renderTasks(currentUser) {
+export async function renderTasks(currentUser, sortByStatus = false) {
   const container = document.createElement('div');
   container.id = 'task-container';
+  showLoading(container);
 
   const { data: tasks, error } = await supabase
     .from('tasks')
@@ -12,26 +14,29 @@ export async function renderTasks(currentUser) {
     .eq('assigned_to', currentUser.id);
 
   if (error) {
-    container.innerHTML = '<p>Error loading tasks.</p>';
     console.error('Error fetching tasks:', error);
+    container.innerHTML = '<p>Error loading tasks.</p>';
     return container;
   }
 
-  if (!tasks.length) {
-    const noTasksMessage = document.createElement('p');
-    noTasksMessage.textContent = 'You have no tasks yet.';
-    container.appendChild(noTasksMessage);
+  container.innerHTML = '';
+
+  if (sortByStatus) {
+    const statusOrder = { 'To-Do': 0, 'In Progress': 1, 'Done': 2 };
+    tasks.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  }
+
+  if (tasks.length === 0) {
+    container.innerHTML = '<p>You have no tasks yet.</p>';
     return container;
   }
 
   for (const task of tasks) {
-    const { data: projectData, error: projectError } = await supabase
+    const { data: projectData } = await supabase
       .from('projects')
       .select('name')
       .eq('id', task.project_id)
       .single();
-
-    const assignedUserName = currentUser?.user_metadata?.username || 'Unknown';
 
     const taskDiv = document.createElement('div');
     taskDiv.className = 'task-card';
@@ -43,7 +48,7 @@ export async function renderTasks(currentUser) {
       <div class="task-info">
         <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
         <span>Project: ${projectData?.name || 'Unknown'}</span>
-        <span>Assigned to: ${assignedUserName}</span>
+        <span>Assigned to: ${currentUser?.user_metadata?.username || 'Unknown'}</span>
       </div>
     `;
 
@@ -56,6 +61,7 @@ export async function renderTasks(currentUser) {
 
   return container;
 }
+
 
 
 function getStatusColor(status) {

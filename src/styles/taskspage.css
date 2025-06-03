@@ -91,10 +91,9 @@
 
 
 #create-task-btn {
-    margin-top: 1rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    cursor: pointer;
+    cursor: pointer;    
     border: none;
     background-color: #005fcc;
     color: white;
@@ -104,4 +103,46 @@
 
 #create-task-btn:hover {
     background-color: #357ABD;
+}
+
+/* filter */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.task-actions button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.task-actions img.icon {
+    width: 30px;
+    height: 30px;
+    filter: brightness(0.3);
+    transition: filter 0.2s;
+}
+
+.task-actions img.icon:hover {
+    filter: brightness(0.8);
+}
+
+#filter-tasks-btn {
+    padding: 0 15px;
+}
+
+#filter-tasks-btn.active {
+    border-radius: 4px;
+}
+
+#filter-tasks-btn.active img {
+    filter: brightness(0) saturate(100%) invert(41%) sepia(87%) saturate(356%) hue-rotate(185deg) brightness(92%) contrast(92%);
 }

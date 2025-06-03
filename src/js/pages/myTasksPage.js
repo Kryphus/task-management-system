@@ -1,34 +1,52 @@
 import { createTask } from '../services/taskService.js';
 import { getCurrentUser, getUserProjects } from '../services/authService.js';
-import { renderTasks } from '../domUtils/taskDisplay.js'; 
+import { renderTasks } from '../domUtils/taskDisplay.js';
 import { getProjectByNameAndUser, createProject, getProjectByName } from '../services/projectService.js';
-import { getUserByUsername } from '../services/authService.js'; 
+import { getUserByUsername } from '../services/authService.js';
 import { showLoading } from '../domUtils/loading.js';
 import { getAllUsers } from '../services/authService.js';
 import { updateTask, deleteTask } from '../services/taskService.js';
-
+import filterIcon from '../../assets/filter.png';
 
 export async function renderMyTasksPage() {
   const main = document.querySelector('main');
-
   showLoading(main);
 
   requestAnimationFrame(async () => {
     const currentUser = await getCurrentUser();
-    const taskContainer = await renderTasks(currentUser);
+    let sorted = false;
 
-    main.innerHTML = `
-      <h2>My Tasks</h2>
-      <button id="create-task-btn">Create New Task</button>
-    `;
-    main.appendChild(taskContainer);
+    const renderAllTasks = async () => {
+      showLoading(main);
+      const taskContainer = await renderTasks(currentUser, sorted);
+      
+      main.innerHTML = `
+        <div class="tasks-header">
+          <h2>My Tasks</h2>
+          <div class="task-actions">
+            <button id="create-task-btn">Create New Task</button>
+            <button id="filter-tasks-btn" title="Sort Tasks" class="${sorted ? 'active' : ''}">
+              <img src="${filterIcon}" alt="Filter Icon" class="icon" />
+            </button>
+          </div>
+        </div>
+      `;
 
-    document.getElementById('create-task-btn').addEventListener('click', () => {
-      openCreateTaskModal(currentUser);
-    });
+      main.appendChild(taskContainer);
+
+      document.getElementById('create-task-btn').addEventListener('click', () => {
+        openCreateTaskModal(currentUser);
+      });
+
+      document.getElementById('filter-tasks-btn').addEventListener('click', async () => {
+        sorted = !sorted;
+        await renderAllTasks(); // re-render and apply visual state
+      });
+    };
+
+    await renderAllTasks();
   });
 }
-
 
 
 function openCreateTaskModal(currentUser) {
@@ -97,7 +115,7 @@ async function handleTaskCreation(e, currentUser) {
       console.log('User not found');
       return;
     }
-    assignedUserUUID = data?.id; 
+    assignedUserUUID = data?.id;
   }
 
   let projectUUID = null;
@@ -139,7 +157,7 @@ async function handleTaskCreation(e, currentUser) {
   }
 
   // Refresh the task list
-  const newContainer = await renderTasks(currentUser);  
+  const newContainer = await renderTasks(currentUser);
   const main = document.querySelector('main');
   const oldContainer = document.getElementById('task-container');
 
@@ -152,7 +170,7 @@ async function handleTaskCreation(e, currentUser) {
 
 async function populateProjects(currentUser) {
   const projectDropdown = document.getElementById('task-project');
-  projectDropdown.innerHTML = ''; 
+  projectDropdown.innerHTML = '';
 
   const projects = await getUserProjects(currentUser.id);
 
@@ -250,7 +268,7 @@ export function openEditTaskModal(task) {
     }
     alert('Task updated successfully.');
     closeModal();
-    const currentUser = await getCurrentUser(); 
+    const currentUser = await getCurrentUser();
     renderTasks(currentUser);
   });
 }
