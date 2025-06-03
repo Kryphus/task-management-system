@@ -1,11 +1,13 @@
 
 import { signUp } from '../services/authService.js';
 import { renderLoginPage } from './loginPage.js';
+import illustration from '../../assets/digital-illustration.png';
+import logo from '../../assets/logo.png';
 
 export function renderSignupPage() {
 
 
-  
+
   const app = document.getElementById('app');
   app.innerHTML = ''; // Clear content
 
@@ -15,24 +17,37 @@ export function renderSignupPage() {
   app.appendChild(wrapper);
 
   wrapper.innerHTML = `
-    <div class="form-card" id="signup-card">
-      <h2>Sign Up</h2>
-      <form id="signup-form">
-        <input type="text" id="signup-username" placeholder="Username" required><br>
-        <div id="signup-username-error" class="error"></div>
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="form-card fade-in" id="signup-card">
 
-        <input type="email" id="signup-email" placeholder="Email" required><br>
-        <div id="signup-email-error" class="error"></div>
+        <div class="logo-group">
+          <img src="${logo}" alt="Logo">
+          <span class="logo-text">okidoki</span>
+        </div>
 
-        <input type="password" id="signup-password" placeholder="Password" required><br>
-        <div id="signup-password-error" class="error"></div>
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+          <input type="text" id="signup-username" placeholder="Username" required><br>
+          <div id="signup-username-error" class="error"></div>
 
-        <button type="submit">Sign Up</button>
-      </form>
-      <p>Already have an account? <a href="#" id="go-to-login">Sign In</a></p>
-      <div id="signup-success" class="success"></div>
+          <input type="email" id="signup-email" placeholder="Email" required><br>
+          <div id="signup-email-error" class="error"></div>
+
+          <input type="password" id="signup-password" placeholder="Password" required><br>
+          <div id="signup-password-error" class="error"></div>
+
+          <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="#" id="go-to-login">Sign In</a></p>
+        <div id="signup-success" class="success"></div>
+      </div>
     </div>
-  `;
+    <div class="auth-right">
+      <img src="${illustration}" alt="Illustration">
+    </div>
+  </div>
+`;
 
   // Trigger the fade-in transition after the content is loaded
   const formCard = wrapper.querySelector('.form-card');
@@ -55,7 +70,7 @@ export function renderSignupPage() {
       return;
     }
 
-    
+
 
     const { data, error } = await signUp(email, password, username);
 

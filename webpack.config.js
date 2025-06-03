@@ -2,6 +2,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const webpack = require("webpack");
+require('dotenv').config();
+
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === "production";

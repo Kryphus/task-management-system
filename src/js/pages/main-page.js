@@ -11,7 +11,7 @@ export const renderNav = () => {
     sidebar.innerHTML = `
         <ul>
             <li>
-                <span class="logo">TskTsk</span>
+                <span class="logo">okidoki</span>
                 <button id="toggle-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
                         <path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/>

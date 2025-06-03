@@ -1,3 +1,76 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Audiowide&family=Poppins:wght@300;400;500;600;700&family=Press+Start+2P&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.auth-container {
+  display: flex;
+  width: 800px;
+  max-width: 90vw;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+/* Left panel (form) */
+.auth-left {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Right panel (illustration) */
+.auth-right {
+  flex: 1;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-right img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* Override for input alignment */
+.auth-left input,
+.auth-left button {
+  width: 100%;
+}
+
+.auth-left .form-card {
+  box-shadow: none;
+  padding: 0;
+  max-width: 100%;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+ 
+}
+
+.logo-group img {
+  height: 55px; /* Resize logo here */
+}
+
+.logo-text {
+  font-family: 'Sour Gummy', cursive;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.logo-group:hover .logo-text {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+
 /* authPage.css */
 .form-wrapper {
   display: flex;
